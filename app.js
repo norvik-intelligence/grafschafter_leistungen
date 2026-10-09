@@ -229,6 +229,7 @@ async function importData(file){
   note:String(v.note||"").slice(0,300)
  }));
  renderVisitFields();update();showView("record");
+ window.dispatchEvent(new CustomEvent("grafschafter:imported"));
 }
 function reset(){
  if(!window.confirm("Alle eingegebenen Daten dieses Dokuments verwerfen?"))return;
@@ -266,6 +267,46 @@ $("export").addEventListener("click",exportData);
 $("import").addEventListener("click",()=>$("importFile").click());
 $("importFile").addEventListener("change",(ev)=>{importData(ev.target.files[0]);ev.target.value="";});
 $("reset").addEventListener("click",reset);
+
+/* Schnittstelle für die verschlüsselte Kundenkartei; keine Datenübertragung. */
+function freshDocument(month = dateISO.slice(0,7), prefills = {}) {
+  const values = Object.fromEntries(fields.map(name=>[name,""]));
+  Object.assign(values,{
+    month,rate:"38.50",extra:"0",extraName:"Fahrtkosten",
+    invoiceDate:dateISO,
+    invoiceNo:"GA-"+month.replace("-","")+"-"+Date.now().toString(36).slice(-6).toUpperCase(),
+    dueDays:"14"
+  },prefills);
+  return {mode:"45b",direct:false,fields:values,visits:[]};
+}
+function snapshot() {
+  return {
+    mode,
+    direct:$("direct").checked,
+    fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),
+    visits:visits.map(v=>({...v}))
+  };
+}
+function restore(data) {
+  if(!data || !data.fields || typeof data.fields!=="object") return;
+  mode=Object.hasOwn(types,data.mode)?data.mode:"45b";
+  fields.forEach(k=>{$(k).value=typeof data.fields[k]==="string"?data.fields[k].slice(0,500):"";});
+  $("direct").checked=!!data.direct;
+  visits=Array.isArray(data.visits)?data.visits.slice(0,150).filter(v=>v&&typeof v==="object").map(v=>({
+    id:"v"+Math.random().toString(36).slice(2),
+    date:String(v.date||"").slice(0,10),
+    start:String(v.start||"").slice(0,5),
+    end:String(v.end||"").slice(0,5),
+    breakMinutes:Math.min(1440,number(v.breakMinutes)),
+    activity:String(v.activity||"Haushaltshilfe").slice(0,100),
+    note:String(v.note||"").slice(0,300)
+  })):[];
+  if(visits.length===0)visits=[{id:"v"+Math.random().toString(36).slice(2),date:"",start:"",end:"",breakMinutes:0,activity:"Haushaltshilfe",note:""}];
+  renderVisitFields();
+  update();
+  showView("record");
+}
+window.GrafschafterApp={snapshot,restore,freshDocument,currentMonth:()=>dateISO.slice(0,7)};
 createVisit();
 showView("record");
 })();
