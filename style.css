@@ -6,3 +6,56 @@
 @media print{
 html,body{margin:0!important;padding:0!important;background:#fff!important;width:auto!important;overflow:visible!important}body *{visibility:hidden!important}.site-header,.editor,.preview-top,.tabs,.preview-help{display:none!important}.container,.workspace,.preview-pane,.paper-stage{margin:0!important;padding:0!important;display:block!important;max-width:none!important;width:100%!important;min-width:0!important;border:0!important;background:#fff!important;overflow:visible!important;box-shadow:none!important}.paper{visibility:visible!important;box-shadow:none!important;margin:0!important;zoom:1!important;transform:none!important;position:static!important;display:block!important;break-inside:avoid!important}.paper *{visibility:visible!important}.paper[hidden]{display:none!important}body.print-record #invoicePaper,body.print-invoice #recordPaper{display:none!important}.paper.landscape{width:297mm!important;min-height:210mm!important;padding:10mm!important}.paper.portrait{width:210mm!important;min-height:297mm!important;padding:13mm!important}.calendar-table td,.calendar-table th{height:11mm}.calendar-table tr:first-child th{height:7mm}.paper-meta{margin-bottom:6mm}.signatures{margin-top:7mm}.invoice-address{margin:8mm 0}.invoice-footer{margin-top:14mm}a[href]:after{content:none!important}
 }
+
+
+/* Verschlüsselter Kundentresor – Kundenübersicht und Monate */
+.kunden-panel{background:linear-gradient(155deg,#f1f9ef 0%,#fff 68%);padding:22px 26px;border-bottom:1px solid var(--line)}
+.kunden-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:15px}
+.kunden-head h2{font-size:19px;letter-spacing:-.6px;margin:5px 0 0}
+.kunden-save-status{display:inline-flex;align-items:center;justify-content:center;text-align:right;border:1px solid #deebdc;background:#fff;color:#69816b;padding:7px 9px;border-radius:8px;font-size:10px;font-weight:800;max-width:137px}
+.kunden-save-status[data-kind=success]{color:#247839;border-color:#c6e4c3;background:#e7f7e6}
+.kunden-save-status[data-kind=error]{color:#ab4242;border-color:#f2c8c4;background:#fff3f1}
+.kunden-search-line{display:grid;grid-template-columns:1fr;gap:6px}
+.kunden-search-line label,.kunden-month label,.kunden-restore label{color:#617168;font-size:11px;font-weight:750}
+.kunden-search-line input,.kunden-search-line select,.kunden-month select,.kunden-restore input{width:100%;padding:12px;border:1px solid #d3e4d2;border-radius:10px;background:#fff;color:#293831;font-size:13px;min-width:0}
+.kunden-search-line select{font-weight:700;background-color:#fff}
+.kunden-action-row{display:flex;gap:9px;align-items:center;margin-top:12px}
+.kunden-action-row>.button{flex:1;min-height:42px}
+.kunden-current{font-size:11px;line-height:1.5;color:#47634d;margin:13px 0}
+.kunden-month{padding:13px;background:#fff;border:1px solid #e1ebdf;border-radius:12px}
+.kunden-month-controls{display:flex;gap:7px;margin-top:7px}
+.kunden-month-controls select{flex:1}
+.kunden-month-controls .small-button{white-space:nowrap}
+.kunden-other-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:12px}
+.kunden-other-actions>button{font-size:11px;font-weight:750;color:#526458;background:white;border:1px solid #dbe7da;border-radius:8px;padding:8px 10px}
+.kunden-other-actions>#kundenLoeschen{color:#9b5555}
+.kunden-other-actions>button:disabled{opacity:.4;cursor:not-allowed}
+.kunden-footnote{font-size:10.5px;color:#667d69;line-height:1.6;margin:13px 0 0}
+.kunden-restore{border:1px solid #cce3c9;border-radius:12px;padding:12px;margin-top:12px;background:white}
+.kunden-restore label{display:block;margin-bottom:6px}
+.kunden-restore .button{font-size:10px;padding:10px 6px}
+.vault-overlay{position:fixed;inset:0;background:rgba(21,36,25,.72);backdrop-filter:blur(7px);z-index:1000;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px}
+.vault-card{max-width:490px;width:100%;background:white;padding:32px;border:1px solid #dcebdd;border-radius:20px;box-shadow:0 24px 100px #08190e55}
+.vault-icon{font-size:32px;background:#dff1df;color:#3a9a50;border-radius:16px;width:62px;height:62px;display:flex;align-items:center;justify-content:center;margin:19px 0 10px}
+.vault-card h2{font-size:28px;line-height:1.15;letter-spacing:-1px;margin:12px 0}
+.vault-card p{color:#66786a;font-size:13px;line-height:1.65}
+.vault-card label{display:block;font-weight:750;font-size:12px;margin:17px 0 7px}
+.vault-card input{width:100%;padding:13px;border:1px solid #d1dfd0;border-radius:11px;font-size:14px}
+.vault-card .button{width:100%;margin-top:20px;padding:15px}
+.vault-error{color:#9f3939!important;font-weight:650;margin:12px 0 0;min-height:20px}
+.vault-caution{margin:22px 0 0;border-top:1px solid #e2ebe1;padding-top:16px;font-size:11.5px!important}
+body.vault-is-locked .workspace{pointer-events:none;user-select:none;filter:blur(2px)}
+@media(max-width:760px){
+ .kunden-panel{padding:20px 19px}
+ .kunden-head h2{font-size:17px}
+ .kunden-save-status{font-size:9px;padding:5px}
+ .kunden-action-row{flex-wrap:wrap}
+ .kunden-action-row>.button{font-size:10px}
+ .kunden-month-controls{flex-direction:column}
+ .vault-card{padding:24px}
+ .vault-card h2{font-size:23px}
+}
+@media print{
+ .vault-overlay,.kunden-panel{display:none!important}
+ body.vault-is-locked .workspace{filter:none!important}
+}
