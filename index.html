@@ -14,12 +14,68 @@
 <header class="site-header">
   <div class="container header-inner">
     <div class="header-brand"><img src="https://www.grafschafter-alltagsservice.de/logo-optimized.webp" alt="Grafschafter Alltagsservice" referrerpolicy="no-referrer"><div><strong>Leistungsportal</strong><small>GRAFSCHAFTER ALLTAGSSERVICE · INTERN</small></div></div>
-    <span class="privacy-badge"><span class="green-dot"></span> Ohne Cloudspeicherung von Kundendaten</span>
+    <span class="privacy-badge"><span class="green-dot"></span> Verschlüsselte Kundenkartei auf diesem Gerät</span>
   </div>
 </header>
+
+<div id="vaultOverlay" class="vault-overlay" role="dialog" aria-modal="true" aria-labelledby="vaultTitle">
+  <div class="vault-card">
+    <span class="eyebrow">GRAFSCHAFTER · SICHERE KUNDENKARTEI</span>
+    <div class="vault-icon" aria-hidden="true">✳</div>
+    <h2 id="vaultTitle">Kundentresor einrichten</h2>
+    <p id="vaultDescription">Lege eine persönliche Passphrase fest. Kunden und Monatsakten werden verschlüsselt auf diesem Gerät gespeichert.</p>
+    <form id="vaultForm" autocomplete="off">
+      <label for="vaultPassword">Passphrase</label>
+      <input id="vaultPassword" type="password" minlength="12" required autocomplete="off" placeholder="Mindestens 12 Zeichen">
+      <div id="vaultConfirmWrap"><label for="vaultConfirm">Passphrase wiederholen</label><input id="vaultConfirm" type="password" autocomplete="off" placeholder="Erneut eingeben"></div>
+      <button type="submit" id="vaultSubmit" class="button green">Kundentresor erstellen</button>
+      <p id="vaultError" class="vault-error" role="alert" aria-live="assertive"></p>
+    </form>
+    <p class="vault-caution"><strong>Wichtig:</strong> Die Passphrase ist nicht wiederherstellbar. Erstelle regelmäßig ein verschlüsseltes Backup. Ohne Passphrase oder nach Löschen der Browserdaten ohne Backup gehen Kundendaten verloren.</p>
+  </div>
+</div>
+
 <main class="container workspace">
   <section class="editor card">
-    <div class="intro"><span class="eyebrow">INTERNES ABRECHNUNGSTOOL</span><h1>Weniger Papier.<br><span>Mehr Zeit.</span></h1><p>Kundendaten eintragen, Einsätze erfassen, Leistungsnachweis und Rechnung als PDF drucken.</p></div>
+    <div class="intro"><span class="eyebrow">INTERNES ABRECHNUNGSTOOL</span><h1>Weniger Papier.<br><span>Mehr Zeit.</span></h1><p>Kunden dauerhaft verwalten, Monatsakten fortführen und Rechnungen oder Leistungsnachweise direkt drucken.</p></div>
+
+    <section id="kundenPanel" class="kunden-panel" aria-label="Gespeicherte Kunden">
+      <div class="kunden-head">
+        <div><span class="eyebrow">KUNDENKARTEI</span><h2>Kunden & Monatsakten</h2></div>
+        <span class="kunden-save-status" id="kundenStatus" role="status" aria-live="polite">Tresor gesperrt</span>
+      </div>
+      <div class="kunden-search-line">
+        <label for="kundenSuche">Kunden suchen</label>
+        <input id="kundenSuche" type="search" autocomplete="off" placeholder="Name eingeben …">
+        <select id="kundenAuswahl" aria-label="Kundenakte auswählen"><option value="">Noch kein Kunde gewählt</option></select>
+      </div>
+      <div class="kunden-action-row">
+        <button type="button" id="kundeNeu" class="button light">+ Neuer Kunde</button>
+        <button type="button" id="kundeSpeichern" class="button green">Kunde & Monat speichern</button>
+      </div>
+      <p id="kundeAktiv" class="kunden-current">Noch keine Kundenakte geöffnet.</p>
+      <div id="kundenMonatPanel" class="kunden-month">
+        <label for="monatsAkten">Gespeicherte Monatsabrechnungen</label>
+        <div class="kunden-month-controls">
+          <select id="monatsAkten" aria-label="Gespeicherten Monat auswählen"></select>
+          <button type="button" id="naechsterMonat" class="small-button">+ Folgemonat</button>
+        </div>
+      </div>
+      <div class="kunden-other-actions">
+        <button type="button" id="kundenBackup">Backup sichern</button>
+        <button type="button" id="kundenImport">Backup laden</button>
+        <button type="button" id="kundenLoeschen">Kunde löschen</button>
+        <button type="button" id="kundenSperren">Sperren</button>
+        <input id="kundenBackupDatei" type="file" accept=".json,.gkbackup,application/json" hidden>
+      </div>
+      <div id="backupRestoreBox" class="kunden-restore" hidden>
+        <label for="backupPassword">Passphrase der Sicherung</label>
+        <input id="backupPassword" type="password" autocomplete="off" placeholder="Passphrase eingeben">
+        <div class="kunden-action-row"><button type="button" id="backupRestoreConfirm" class="button green">Sicherung wiederherstellen</button><button type="button" id="backupCancel" class="button light">Abbrechen</button></div>
+        <p class="muted">Import ersetzt die bisher auf diesem Gerät gespeicherte Kartei vollständig.</p>
+      </div>
+      <p class="kunden-footnote">Verschlüsselt auf diesem Gerät gespeichert. Für einen anderen Browser oder PC das Backup exportieren und dort importieren. Kein automatischer Cloud-Abgleich.</p>
+    </section>
     <form id="documentForm" autocomplete="off">
       <div class="section">
         <h2><span>01</span> Abrechnungsart</h2>
@@ -99,5 +155,6 @@
   </section>
 </main>
 <script src="/app.js" defer></script>
+<script src="/kunden.js" defer></script>
 </body>
 </html>
