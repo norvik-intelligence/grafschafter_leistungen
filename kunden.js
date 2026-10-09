@@ -241,7 +241,14 @@
   async function changeMonth(toMonth){
     if(busy||!/^\d{4}-(0[1-9]|1[0-2])$/.test(toMonth))return;
     if(!customerId){
-      month=toMonth;renderPanel();return;
+      const draft=app.snapshot();
+      month=toMonth;
+      draft.fields.month=toMonth;
+      draft.fields.invoiceNo="GA-"+toMonth.replace("-","")+"-"+Date.now().toString(36).slice(-6).toUpperCase();
+      draft.visits=[];
+      recovering=true;
+      try{app.restore(draft);}finally{recovering=false;}
+      renderPanel();return;
     }
     if(month===toMonth)return;
     busy=true;
@@ -275,6 +282,7 @@
       return;
     }
     busy=true;
+    clearTimeout(timer);timer=null;
     try{
       if(!customerId){
         const id=cryptoApi.randomUUID();
