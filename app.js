@@ -229,6 +229,7 @@ async function importData(file){
   note:String(v.note||"").slice(0,300)
  }));
  renderVisitFields();update();showView("record");
+ window.dispatchEvent(new CustomEvent("grafschafter:imported"));
 }
 function reset(){
  if(!window.confirm("Alle eingegebenen Daten dieses Dokuments verwerfen?"))return;
