@@ -444,7 +444,7 @@
   $("kundeNeu").addEventListener("click",newCustomer);
   $("kundeSpeichern").addEventListener("click",saveCustomer);
   $("kundenSuche").addEventListener("input",()=>renderPanel());
-  $("kundenAuswahl").addEventListener("change",e=>{if(e.target.value)openCustomer(e.target.value);else newCustomer();});
+  $("kundenAuswahl").addEventListener("change",e=>e.target.value?openCustomer(e.target.value):newCustomer());
   $("monatsAkten").addEventListener("change",e=>changeMonth(e.target.value));
   $("month").addEventListener("change",e=>changeMonth(e.target.value));
   $("naechsterMonat").addEventListener("click",()=>{
@@ -474,14 +474,20 @@
     e.preventDefault();e.stopImmediatePropagation();
     newCustomer();
   },true);
-  window.addEventListener("grafschafter:imported",async()=>{
+  // Die bisherige Kundenakte vor dem Laden fremder Monatsdaten sichern.
+  // Der Import selbst darf niemals die bisher geöffnete Kundenakte überschreiben.
+  $("importFile").addEventListener("change",()=>{
+    if(busy||!vault||!customerId)return;
+    clearTimeout(timer);timer=null;
+    if(saveMonthToModel(month))persist().catch(()=>{});
+  },true);
+  window.addEventListener("grafschafter:imported",()=>{
     if(busy||!vault)return;
-    try{
-      await flush();
-      customerId=null;month=app.snapshot().fields.month||app.currentMonth();
-      renderPanel();
-      status("Importiertes Dokument – als neuen Kunden speichern");
-    }catch(err){alert("Import konnte nicht übernommen werden: "+err.message);}
+    clearTimeout(timer);timer=null;
+    customerId=null;
+    month=app.snapshot().fields.month||app.currentMonth();
+    renderPanel();
+    status("Importiertes Dokument – als neuen Kunden speichern");
   });
   window.addEventListener("beforeunload",e=>{
     // Nicht auf asynchrone IndexedDB-Schreibvorgänge beim Schließen verlassen.

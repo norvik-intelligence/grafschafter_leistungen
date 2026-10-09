@@ -207,3 +207,27 @@ test("deleting a customer removes the encrypted customer record",async()=>{
   assert.equal(two.node("kundenAuswahl").children.length,1);
   assert.equal(two.getForm().fields.customer,"");
 });
+
+
+test("loading a legacy month file cannot overwrite the previously open customer",async()=>{
+  const one=await boot();
+  await setupVault(one);
+  one.setForm({customer:"Kundin Bestand",insured:"BESTAND-123"});
+  await one.node("kundeSpeichern").emit("click");
+  await one.node("importFile").emit("change");
+  one.setForm({customer:"Kundin Import",insured:"IMPORT-456"});
+  await one.events.get("grafschafter:imported")();
+  await one.node("kundeSpeichern").emit("click");
+  const two=await boot(one.store);
+  await unlockVault(two);
+  const choices=two.node("kundenAuswahl").children;
+  assert.equal(choices.length,3,"zwei Kundeneinträge und eine Auswahloption");
+  const bestand=choices.find(x=>x.textContent==="Kundin Bestand");
+  const neu=choices.find(x=>x.textContent==="Kundin Import");
+  assert.ok(bestand);
+  assert.ok(neu);
+  await two.node("kundenAuswahl").emit("change",{target:{value:bestand.value}});
+  assert.equal(two.getForm().fields.insured,"BESTAND-123");
+  await two.node("kundenAuswahl").emit("change",{target:{value:neu.value}});
+  assert.equal(two.getForm().fields.insured,"IMPORT-456");
+});
