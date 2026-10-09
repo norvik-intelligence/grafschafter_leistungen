@@ -444,7 +444,7 @@
   $("kundeNeu").addEventListener("click",newCustomer);
   $("kundeSpeichern").addEventListener("click",saveCustomer);
   $("kundenSuche").addEventListener("input",()=>renderPanel());
-  $("kundenAuswahl").addEventListener("change",e=>{if(e.target.value)openCustomer(e.target.value);else newCustomer();});
+  $("kundenAuswahl").addEventListener("change",e=>e.target.value?openCustomer(e.target.value):newCustomer());
   $("monatsAkten").addEventListener("change",e=>changeMonth(e.target.value));
   $("month").addEventListener("change",e=>changeMonth(e.target.value));
   $("naechsterMonat").addEventListener("click",()=>{
