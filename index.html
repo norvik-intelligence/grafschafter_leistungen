@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#f5f8f3">
+<title>Grafschafter Leistungen · Nachweise & Rechnungen</title>
+<link rel="icon" href="https://www.grafschafter-alltagsservice.de/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="header-brand"><img src="https://www.grafschafter-alltagsservice.de/logo-optimized.webp" alt="Grafschafter Alltagsservice" referrerpolicy="no-referrer"><div><strong>Leistungsportal</strong><small>GRAFSCHAFTER ALLTAGSSERVICE · INTERN</small></div></div>
+    <span class="privacy-badge"><span class="green-dot"></span> Ohne Cloudspeicherung von Kundendaten</span>
+  </div>
+</header>
+<main class="container workspace">
+  <section class="editor card">
+    <div class="intro"><span class="eyebrow">INTERNES ABRECHNUNGSTOOL</span><h1>Weniger Papier.<br><span>Mehr Zeit.</span></h1><p>Kundendaten eintragen, Einsätze erfassen, Leistungsnachweis und Rechnung als PDF drucken.</p></div>
+    <form id="documentForm" autocomplete="off">
+      <div class="section">
+        <h2><span>01</span> Abrechnungsart</h2>
+        <div class="type-picker">
+          <button type="button" data-type="45b" class="type-button selected">Entlastungsbetrag<small>§ 45b SGB XI</small></button>
+          <button type="button" data-type="39" class="type-button">Verhinderungspflege<small>§ 39 SGB XI</small></button>
+          <button type="button" data-type="privat" class="type-button">Privatzahler<small>Privatrechnung</small></button>
+        </div>
+        <p class="context-hint" id="typeHint"></p>
+      </div>
+      <div class="section">
+        <h2><span>02</span> Kunde / versicherte Person</h2>
+        <div class="fields">
+          <label class="wide">Vor- und Nachname<input id="customer" placeholder="Max Mustermann"></label>
+          <label class="wide">Straße und Hausnummer<input id="street" placeholder="Musterstraße 12"></label>
+          <label>PLZ und Ort<input id="city" placeholder="47443 Moers"></label>
+          <label>Geburtsdatum<input type="date" id="birth"></label>
+          <label>Versichertennummer<input id="insured" placeholder="Versichertennummer"></label>
+          <label>Pflegegrad<select id="care"><option value="">Bitte wählen</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+        </div>
+      </div>
+      <div class="section">
+        <h2><span>03</span> Rechnungsempfänger</h2>
+        <div class="fields">
+          <label class="wide">Pflegekasse / Kunde<input id="payer" placeholder="z. B. KNAPPSCHAFT"></label>
+          <label class="wide">Rechnungsanschrift<textarea id="payerAddress" placeholder="Straße oder Postfach, PLZ Ort" rows="2"></textarea></label>
+          <label class="wide checkboxline"><input type="checkbox" id="direct"> Direkte Abrechnung mit der Pflegekasse (erforderliche Abtretung / Vollmacht liegt vor)</label>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-heading"><h2><span>04</span> Leistungszeitraum & Einsätze</h2><button type="button" class="small-button" id="addVisit">+ Einsatz</button></div>
+        <div class="fields"><label>Abrechnungsmonat<input type="month" id="month"></label><label>Einsatzkraft<input id="staff" placeholder="Name Betreuungskraft"></label></div>
+        <div id="visits" class="visits"></div>
+        <p class="muted">Stunden werden aus Start, Ende und Pausen berechnet. Mehrere Einsätze am selben Tag werden im Monatsraster zusammengefasst.</p>
+      </div>
+      <div class="section">
+        <h2><span>05</span> Rechnungsangaben</h2>
+        <div class="fields">
+          <label>Stundensatz in €<input id="rate" type="number" step="0.01" min="0" value="38.50"></label>
+          <label>Zusatzkosten in €<input id="extra" type="number" step="0.01" min="0" value="0"></label>
+          <label class="wide">Bezeichnung der Zusatzkosten<input id="extraName" value="Fahrtkosten"></label>
+          <label>Rechnungsdatum<input type="date" id="invoiceDate"></label>
+          <label>Rechnungsnummer<input id="invoiceNo"></label>
+          <label class="wide">Steuernummer oder USt-IdNr.<input id="taxId" placeholder="Bitte ergänzen"></label>
+          <label class="wide">Steuerlicher Rechnungsvermerk<select id="taxMode">
+            <option value="">Vor Versand steuerlichen Hinweis auswählen</option>
+            <option value="exempt">Steuerbefreiung § 4 Nr. 16 UStG (nur wenn zutreffend)</option>
+            <option value="small">Keine Umsatzsteuer nach § 19 UStG (nur wenn zutreffend)</option>
+            <option value="custom">Eigener Steuerhinweis</option>
+          </select></label>
+          <label class="wide" id="customTaxWrap" hidden>Eigener Steuerhinweis<input id="customTax" placeholder="Steuerlicher Hinweis"></label>
+          <label class="wide">IBAN<input id="iban" placeholder="DE..." autocomplete="off"></label>
+          <label>BIC (optional)<input id="bic"></label>
+          <label>Zahlungsziel in Tagen<input id="dueDays" type="number" min="0" value="14"></label>
+        </div>
+      </div>
+      <div class="section last">
+        <div class="stats">
+          <div><small>Einsätze</small><strong id="statCount">0</strong></div>
+          <div><small>Stunden</small><strong id="statHours">0,00</strong></div>
+          <div><small>Betrag</small><strong id="statAmount">0,00 €</strong></div>
+        </div>
+        <div class="notice">Prüfe vor dem Einreichen die Leistungsberechtigung, vereinbarte Stundensätze, Abtretung/Vollmacht, Steuerbefreiung und das jeweilige Abrechnungsverfahren der Kasse. Das Tool verschickt keine Rechnungen.</div>
+        <div class="editor-actions"><button type="button" id="export" class="button light">Daten sichern</button><button type="button" id="import" class="button light">Daten laden</button><button type="button" id="reset" class="button light">Neues Dokument</button><input type="file" id="importFile" accept=".json,application/json" hidden></div>
+        <p class="muted">Die Daten werden nicht an unseren Server übertragen. Exportierte Dateien enthalten sensible Angaben: sicher und zugriffsgeschützt aufbewahren.</p>
+      </div>
+    </form>
+  </section>
+  <section class="preview-pane">
+    <div class="preview-top"><div><span class="eyebrow">LIVE-VORSCHAU</span><h2>Fertig zum Drucken.</h2></div><div class="preview-actions"><button class="button dark" id="printRecord" type="button">Nachweis drucken / PDF</button><button class="button green" id="printInvoice" type="button">Rechnung drucken / PDF</button></div></div>
+    <div class="tabs"><button type="button" data-view="record" class="tab active">Leistungsnachweis</button><button type="button" data-view="invoice" class="tab">Rechnung</button></div>
+    <div class="paper-stage">
+      <article id="recordPaper" class="paper landscape"></article>
+      <article id="invoicePaper" class="paper portrait" hidden></article>
+    </div>
+    <p class="muted preview-help">Im Druckdialog „Als PDF speichern“ wählen. Der Nachweis ist im A4-Querformat, die Rechnung im A4-Hochformat formatiert.</p>
+  </section>
+</main>
+<script src="/app.js" defer></script>
+</body>
+</html>
