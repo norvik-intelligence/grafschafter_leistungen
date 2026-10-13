@@ -147,7 +147,7 @@ function drawInvoice(){
  '<div class="invoice-total"><span>Rechnungsbetrag</span><span>'+euros(t.amount)+'</span></div>'+
  '<div class="invoice-note"><strong>Steuerlicher Hinweis:</strong> '+clean(taxText())+
  '\n<strong>Zahlung:</strong> Bitte bis '+invoiceDue()+' unter Angabe der Rechnungsnummer überweisen.'+
- '\n<strong>Kontoinhaber:</strong> Sokayna Malki   <strong>IBAN:</strong> '+clean(get("iban")||"________________________")+
+ '\n<strong>Kontoinhaber:</strong> Mohamed Jamai   <strong>IBAN:</strong> '+clean(get("iban")||"________________________")+
  (get("bic")?"   <strong>BIC:</strong> "+clean(get("bic")):"")+
  (payerNote?"\n\n"+clean(payerNote):"")+
  '</div>'+
