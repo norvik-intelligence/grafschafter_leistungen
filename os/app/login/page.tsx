@@ -1,0 +1,6 @@
+"use client";
+import {useState} from "react";
+import {LockKeyhole} from "lucide-react";
+export default function Login(){const [password,setPassword]=useState(""),[error,setError]=useState(""),[loading,setLoading]=useState(false);
+ async function submit(e:React.FormEvent){e.preventDefault();setLoading(true);setError("");try{const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});const j=await r.json();if(!r.ok)throw new Error(j.error||"Anmeldung fehlgeschlagen");location.href="/"}catch(e){setError(e instanceof Error?e.message:"Fehler")}finally{setLoading(false)}}
+ return <main className="shell" style={{maxWidth:480,paddingTop:90}}><section className="panel"><LockKeyhole size={34}/><h1 className="text-2xl font-bold mt-4">Grafschafter OS</h1><p className="muted mt-2">Interner Mitarbeiterzugang</p><form onSubmit={submit} className="mt-6 space-y-4"><label className="block">Passwort<input className="field mt-2" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><button className="btn w-full" disabled={loading}>{loading?"Anmeldung läuft…":"Anmelden"}</button></form>{error&&<p role="alert" className="mt-4">{error}</p>}</section></main>}
