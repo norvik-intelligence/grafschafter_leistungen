@@ -3,6 +3,6 @@ const box=document.createElement("section");box.className="card";box.style.paddi
 host.append(box);const $=id=>document.getElementById(id);
 async function call(method,body){const r=await fetch("/api/customers",{method,credentials:"same-origin",headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});const j=await r.json();if(!r.ok)throw Error(j.error||"Cloud nicht erreichbar");return j}
 async function load(){try{const data=await call("GET");$("osCloudCustomers").replaceChildren(...data.customers.map(c=>{const li=document.createElement("li");li.textContent=c.display_name;return li}));$("osCloudMessage").textContent=data.customers.length+" Cloud-Kunden geladen."}catch(e){$("osCloudMessage").textContent=e.message}}
-$("osCloudRefresh").addEventListener("click",load);
+$("osCloudRefresh").addEventListener("click",load);void load();
 $("osCloudCreate").addEventListener("click",async()=>{const name=$("osCloudName").value.trim();if(!name)return;try{await call("POST",{name});$("osCloudName").value="";await load()}catch(e){$("osCloudMessage").textContent=e.message}});
 })();
