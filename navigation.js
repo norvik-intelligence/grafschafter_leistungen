@@ -23,7 +23,7 @@ function setView(view){if(!sections.some(x=>x[0]===view))view="dashboard";
  else editor.querySelectorAll(".section").forEach(el=>el.hidden=false);
  if(view==="budgets"&&budget){placeholder.replaceChildren(budget);budget.hidden=false}
  else if(budget)budget.hidden=true;
- if(view==="dokumente"){placeholder.innerHTML='<div class="card" style="padding:24px"><h2>Dokumente</h2><p>Vertrags- und Stundenzettel-Uploads werden erst nach Freigabe des geschützten Cloudspeichers aktiviert. Bitte keine sensiblen Dokumente hochladen.</p></div>'}
+ if(view==="dokumente"){if(budget&&budget.parentElement===placeholder)budget.remove();placeholder.innerHTML='<div class="card" style="padding:24px"><h2>Dokumente</h2><p>Vertrags- und Stundenzettel-Uploads werden erst nach Freigabe des geschützten Cloudspeichers aktiviert. Bitte keine sensiblen Dokumente hochladen.</p></div>'}
  if(cloud)cloud.hidden=view!=="einstellungen";
  if(view==="dashboard")refreshOverview();
  nav.querySelectorAll("[data-os-view]").forEach(b=>{const active=b.dataset.osView===view;b.classList.toggle("active",active);b.setAttribute("aria-current",active?"page":"false")});
