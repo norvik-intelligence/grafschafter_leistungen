@@ -33,5 +33,5 @@ nav.addEventListener("click",e=>{const b=e.target.closest("[data-os-view]");if(b
 dashboard.addEventListener("click",e=>{const b=e.target.closest("[data-os-go]");if(b)setView(b.dataset.osGo)});
 setView(location.hash.slice(1)||"dashboard");
 window.addEventListener("hashchange",()=>setView(location.hash.slice(1)));
-const observer=new MutationObserver(()=>{if(!dashboard.hidden)refreshOverview()});observer.observe(document.getElementById("vaultOverlay"),{attributes:true,attributeFilter:["hidden"]});
+const observer=new MutationObserver(()=>{if(!dashboard.hidden)refreshOverview()});const overlay=document.getElementById("vaultOverlay");if(overlay)observer.observe(overlay,{attributes:true,attributeFilter:["hidden"]});
 })();
