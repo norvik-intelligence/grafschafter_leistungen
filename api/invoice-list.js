@@ -1,0 +1,2 @@
+const {json,session,query}=require("./_lib");
+module.exports=async function(req,res){if(!session(req))return json(res,401,{error:"Anmeldung erforderlich"});if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});try{const rows=await query("SELECT id,invoice_number,customer_id,period,status,amount_cents,due_on FROM invoices WHERE organization_id=? ORDER BY created_at DESC LIMIT 300",["grafschafter-alltagsservice"]);return json(res,200,{invoices:rows})}catch{return json(res,503,{error:"Rechnungen nicht erreichbar"})}};
