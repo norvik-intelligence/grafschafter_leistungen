@@ -1,0 +1,4 @@
+import {createCipheriv,createDecipheriv,randomBytes} from "node:crypto";
+function key(){const s=process.env.APP_DATA_ENCRYPTION_KEY;if(!s)throw new Error("ENCRYPTION_NOT_CONFIGURED");const k=Buffer.from(s,"base64");if(k.length!==32)throw new Error("INVALID_ENCRYPTION_KEY");return k}
+export function encrypt(data:unknown){const iv=randomBytes(12),cipher=createCipheriv("aes-256-gcm",key(),iv);const encrypted=Buffer.concat([cipher.update(JSON.stringify(data),"utf8"),cipher.final()]);return {ciphertext:Buffer.concat([encrypted,cipher.getAuthTag()]).toString("base64"),nonce:iv.toString("base64")}}
+export function decrypt<T>(ciphertext:string,nonce:string):T{const b=Buffer.from(ciphertext,"base64"),iv=Buffer.from(nonce,"base64");const decipher=createDecipheriv("aes-256-gcm",key(),iv);decipher.setAuthTag(b.subarray(b.length-16));return JSON.parse(Buffer.concat([decipher.update(b.subarray(0,b.length-16)),decipher.final()]).toString("utf8")) as T}
