@@ -9,7 +9,7 @@
   "dependencies": {
     "pdf-lib": "1.17.1",
     "zod": "4.1.12",
-    "@uppy/core": "5.1.0",
+    "@uppy/core": "5.1.1",
     "@uppy/dashboard": "5.0.2",
     "@uppy/aws-s3": "5.0.2",
     "signature_pad": "5.1.1"
