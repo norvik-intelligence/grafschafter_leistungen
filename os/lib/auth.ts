@@ -1,14 +1,5 @@
-import {createRemoteJWKSet,jwtVerify} from "jose";
+import {jwtVerify,SignJWT} from "jose";
 import type {NextRequest} from "next/server";
-const domain=process.env.CF_ACCESS_TEAM_DOMAIN;
-const audience=process.env.CF_ACCESS_AUD;
-export async function requireUser(req:NextRequest):Promise<string>{
- if(!domain||!audience)throw new Error("AUTH_NOT_CONFIGURED");
- const token=req.cookies.get("CF_Authorization")?.value||req.headers.get("cf-access-jwt-assertion");
- if(!token)throw new Error("UNAUTHORIZED");
- const issuer="https://"+domain.replace(/^https?:\/\//,"").replace(/\/$/,"");
- const keys=createRemoteJWKSet(new URL(issuer+"/cdn-cgi/access/certs"));
- const {payload}=await jwtVerify(token,keys,{issuer,audience});
- if(typeof payload.sub!=="string"||!payload.sub)throw new Error("UNAUTHORIZED");
- return payload.sub;
-}
+function secret(){const s=process.env.OS_SESSION_SECRET;if(!s||s.length<32)throw new Error("AUTH_NOT_CONFIGURED");return new TextEncoder().encode(s)}
+export async function signSession(){return new SignJWT({role:"owner"}).setProtectedHeader({alg:"HS256"}).setSubject("local-owner").setIssuedAt().setExpirationTime("8h").setIssuer("grafschafter-os").sign(secret())}
+export async function requireUser(req:NextRequest):Promise<string>{const token=req.cookies.get("grafschafter_session")?.value;if(!token)throw new Error("UNAUTHORIZED");try{const {payload}=await jwtVerify(token,secret(),{issuer:"grafschafter-os",algorithms:["HS256"]});if(payload.sub!=="local-owner")throw new Error("UNAUTHORIZED");return payload.sub}catch{throw new Error("UNAUTHORIZED")}}
