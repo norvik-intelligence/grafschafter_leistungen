@@ -1,0 +1,2 @@
+const {config,json,session,query}=require("./_lib");
+module.exports=async function(req,res){if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});const authenticated=session(req);if(!authenticated)return json(res,200,{authenticated:false,connected:false});const c=config();if(!c.CF_D1_API_TOKEN)return json(res,200,{authenticated:true,connected:false,reason:"D1_TOKEN_MISSING"});try{await query("SELECT 1 AS ok");return json(res,200,{authenticated:true,connected:true})}catch{return json(res,200,{authenticated:true,connected:false,reason:"D1_UNAVAILABLE"})}};
