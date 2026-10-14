@@ -1,0 +1,9 @@
+{
+  "name": "grafschafter-leistungen",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check api/_lib.js && node --check api/customers.js && node --check api/visits.js && node --check api/invoices.js && node --check api/documents.js && node --check api/budgets.js && node --check navigation.js && node --check cloud.js && node --check cloud-customers.js && node --check cloud-dashboard.js && node --check cloud-records.js && node --check cloud-company.js"
+  }
+}
