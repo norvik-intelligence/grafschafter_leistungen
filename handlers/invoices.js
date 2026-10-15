@@ -1,0 +1,9 @@
+const {invoice}=require("../api/_validation");
+const {json,session,sameOrigin,query,crypto}=require("../api/_lib");const org="grafschafter-alltagsservice";
+module.exports=async(req,res)=>{if(!session(req))return json(res,401,{error:"Anmeldung erforderlich"});try{
+if(req.method==="GET"){const rows=await query("SELECT i.id,i.customer_id,c.display_name AS customer,i.invoice_number,i.amount_cents,i.status,i.created_at FROM invoices i JOIN customers c ON c.id=i.customer_id AND c.organization_id=i.organization_id WHERE i.organization_id=? ORDER BY i.created_at DESC LIMIT 200",[org]);return json(res,200,{invoices:rows})}
+if(req.method!=="POST")return json(res,405,{error:"Method not allowed"});if(!sameOrigin(req))return json(res,403,{error:"Origin rejected"});
+const {customerId,number,amountCents}=req.body||{};if(!invoice.safeParse(req.body).success)return json(res,400,{error:"Ungültige Rechnungsdaten"});
+const c=await query("SELECT id FROM customers WHERE organization_id=? AND id=? LIMIT 1",[org,customerId]);if(!c.length)return json(res,404,{error:"Kunde fehlt"});
+const id=crypto.randomUUID();await query("INSERT INTO invoices(id,organization_id,customer_id,invoice_number,amount_cents,status) VALUES(?,?,?,?,?,'draft')",[id,org,customerId,number.trim(),amountCents]);return json(res,201,{id});
+}catch{return json(res,503,{error:"Rechnung konnte nicht gespeichert werden"})}};
