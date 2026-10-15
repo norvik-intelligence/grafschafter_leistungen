@@ -5,6 +5,6 @@ module.exports=async function(req,res){
  if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});
  try{
   const rows=await query("SELECT id,customer_id,filename,content_type,size_bytes,document_type,review_status,created_at FROM documents WHERE organization_id=? ORDER BY created_at DESC LIMIT 300",[org]);
-  return json(res,200,{documents:rows,uploadAvailable:false});
+  return json(res,200,{documents:rows,uploadAvailable:!!process.env.CF_R2_API_TOKEN});
  }catch{return json(res,503,{error:"Dokumentenliste derzeit nicht verfügbar"})}
 };
