@@ -1,0 +1,8 @@
+(()=>{"use strict";const host=document.querySelector(".os-dashboard");if(!host)return;
+const box=document.createElement("section");box.className="card";box.style.padding="22px";box.innerHTML='<h2>Cloud-Kundenkartei (D1)</h2><p class="muted">Zentrale Kundennamen ohne lokalen Tresor. Bitte vorerst nur Testdatensätze anlegen. Gesundheits- und Versicherungsdaten bleiben bis zur sicheren Migration außen vor.</p><div class="kunden-action-row"><button type="button" id="osCloudRefresh">Kunden aus Cloud laden</button><input id="osCloudName" maxlength="160" placeholder="Neuer Testkunde" aria-label="Neuer Testkunde"><button type="button" id="osCloudCreate">Testkunde speichern</button></div><p id="osCloudMessage" aria-live="polite"></p><ul id="osCloudCustomers"></ul>';
+host.append(box);const $=id=>document.getElementById(id);
+async function call(method,body){const r=await fetch("/api/customers",{method,credentials:"same-origin",headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});const j=await r.json();if(!r.ok)throw Error(j.error||"Cloud nicht erreichbar");return j}
+async function load(){try{const data=await call("GET");$("osCloudCustomers").replaceChildren(...data.customers.map(c=>{const li=document.createElement("li");li.textContent=c.display_name;return li}));$("osCloudMessage").textContent=data.customers.length+" Cloud-Kunden geladen."}catch(e){$("osCloudMessage").textContent=e.message}}
+$("osCloudRefresh").addEventListener("click",load);void load();
+$("osCloudCreate").addEventListener("click",async()=>{const name=$("osCloudName").value.trim();if(!name)return;try{await call("POST",{name});$("osCloudName").value="";await load()}catch(e){$("osCloudMessage").textContent=e.message}});
+})();
