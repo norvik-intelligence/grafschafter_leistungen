@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check api/_lib.js && node --check api/customers.js && node --check api/visits.js && node --check api/invoices.js && node --check api/documents.js && node --check api/budgets.js && node --check navigation.js && node --check cloud.js && node --check cloud-customers.js && node --check cloud-dashboard.js && node --check cloud-records.js && node --check cloud-company.js && node --check api/_invoice-pdf.js && node --check api/document-register.js"
+    "check": "node --check api/_lib.js && node --check api/customers.js && node --check api/visits.js && node --check api/invoices.js && node --check api/documents.js && node --check api/budgets.js && node --check navigation.js && node --check cloud.js && node --check cloud-customers.js && node --check cloud-dashboard.js && node --check cloud-records.js && node --check cloud-company.js && node --check api/_invoice-pdf.js && node --check api/document-register.js && node --check api/_validation.js && node --check api/invoice-pdf.js"
   },
   "dependencies": {
     "pdf-lib": "1.17.1",
