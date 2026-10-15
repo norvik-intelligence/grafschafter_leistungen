@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check api/_lib.js && node --check api/customers.js && node --check api/visits.js && node --check api/invoices.js && node --check api/documents.js && node --check api/budgets.js && node --check navigation.js && node --check cloud.js && node --check cloud-customers.js && node --check cloud-dashboard.js && node --check cloud-records.js && node --check cloud-company.js && node --check api/_invoice-pdf.js && node --check api/document-register.js && node --check api/_validation.js && node --check api/invoice-pdf.js"
+    "check": "node --check api/_lib.js && node --check api/_validation.js && node --check api/_invoice-pdf.js && node --check 'api/[route].js' && node --check handlers/cloud-login.js && node --check handlers/cloud-logout.js && node --check handlers/cloud-status.js && node --check handlers/cloud-backup.js && node --check handlers/customers.js && node --check handlers/visits.js && node --check handlers/invoices.js && node --check handlers/company.js && node --check handlers/documents.js && node --check handlers/document-register.js && node --check handlers/invoice-pdf.js && node --check handlers/invoice-list.js && node --check handlers/visit-list.js && node --check handlers/dashboard-stats.js && node --check handlers/budgets.js && node --check navigation.js && node --check cloud.js && node --check cloud-customers.js && node --check cloud-dashboard.js && node --check cloud-records.js && node --check cloud-company.js"
   },
   "dependencies": {
     "pdf-lib": "1.17.1",
