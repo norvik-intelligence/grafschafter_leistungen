@@ -1,0 +1,2 @@
+const {json,session,query}=require("../api/_lib");
+module.exports=async function(req,res){if(!session(req))return json(res,401,{error:"Anmeldung erforderlich"});if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});try{const rows=await query("SELECT id,customer_id,starts_at,ends_at,status,service_code FROM visits WHERE organization_id=? ORDER BY starts_at DESC LIMIT 300",["grafschafter-alltagsservice"]);return json(res,200,{visits:rows})}catch{return json(res,503,{error:"Leistungen nicht erreichbar"})}};
