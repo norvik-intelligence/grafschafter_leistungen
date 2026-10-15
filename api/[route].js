@@ -8,6 +8,7 @@ const handlers=Object.freeze({
  "invoices":require("../handlers/invoices"),
  "company":require("../handlers/company"),
  "documents":require("../handlers/documents"),
+ "document-file":require("../handlers/document-file"),
  "document-register":require("../handlers/document-register"),
  "invoice-pdf":require("../handlers/invoice-pdf"),
  "invoice-list":require("../handlers/invoice-list"),
